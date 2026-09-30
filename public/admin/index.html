@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Biochamelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="admin-page"><div class="admin-wrap">
+  <div class="admin-brand"><a href="/" class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>Biochamelle</a></div>
+
+  <div id="login-view" class="panel hidden">
+    <h2>Admin login</h2>
+    <form id="login-form">
+      <div class="form-group"><label for="email">Email</label><input type="email" id="email" required></div>
+      <div class="form-group"><label for="password">Password</label><input type="password" id="password" required></div>
+      <button type="submit" class="btn btn-block">Log in</button>
+    </form>
+  </div>
+
+  <div id="dashboard-view" class="panel hidden">
+    <div class="admin-header"><h2>Dashboard</h2><button id="logout-btn" class="btn btn-danger btn-sm" type="button">Log out</button></div>
+    <div class="tabs">
+      <button class="tab" data-tab="products" onclick="showSection('products')">Products</button>
+      <button class="tab" data-tab="categories" onclick="showSection('categories')">Categories</button>
+      <button class="tab" data-tab="orders" onclick="showSection('orders')">Orders</button>
+    </div>
+
+    <div id="section-products" class="hidden">
+      <form id="product-form" class="admin-form">
+        <h4>Add / edit product</h4>
+        <input type="hidden" id="p-id">
+        <div class="form-grid">
+          <input type="text" id="p-name" placeholder="Name" required>
+          <input type="number" id="p-price" placeholder="Price (DZD)" required>
+          <select id="p-category"></select>
+          <input type="number" id="p-stock" placeholder="Stock quantity" required>
+        </div>
+        <textarea id="p-desc" rows="3" placeholder="Description" style="margin-bottom:12px"></textarea>
+        <div class="form-grid">
+          <div><label class="field-label">Sizes (comma separated, e.g. S,M,L)</label><input type="text" id="p-sizes"></div>
+          <div><label class="field-label">Colors (comma separated, e.g. Red,Blue)</label><input type="text" id="p-colors"></div>
+        </div>
+        <div class="upload-box">
+          <label class="field-label">Images (max 6)</label>
+          <button type="button" id="upload_widget" class="btn btn-outline btn-sm">Upload images</button>
+          <p class="hint">Click an image to make it the main thumbnail (green border).</p>
+          <div id="uploaded-images-container" class="image-preview-container"></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-olive">Save product</button>
+          <button type="button" class="btn btn-outline" onclick="resetProductForm()">Clear form</button>
+        </div>
+      </form>
+      <div id="admin-products-list"></div>
+    </div>
+
+    <div id="section-categories" class="hidden">
+      <form id="cat-form" class="cat-form">
+        <input type="text" id="cat-name" placeholder="New category name" required>
+        <button type="submit" class="btn">Add category</button>
+      </form>
+      <ul id="admin-cat-list" class="cat-list"></ul>
+    </div>
+
+    <div id="section-orders" class="hidden">
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th>Date</th><th>Customer / address</th><th>Product</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="orders-table-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div></div>
+<script type="module" src="/js/supabase-client.js"></script>
+<script type="module" src="/js/admin.js"></script>
+</body>
+</html>
