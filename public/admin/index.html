@@ -7,11 +7,217 @@
 <title>Admin Workspace — Biochamelle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/admin-extras.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
+<style>
+  :root {
+    --color-paper: #F8F8F6;
+    --color-surface: #FFFFFF;
+    --color-charcoal: #1C1C1B;
+    --color-charcoal-soft: #4A4A48;
+    --color-gray: #8E8E93;
+    --color-line: rgba(0, 0, 0, 0.06);
+    --color-sage: #A1B098;
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --shadow-float: 0 20px 40px rgba(0, 0, 0, 0.03);
+    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.02);
+    --blur-heavy: blur(20px) saturate(180%);
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body.admin-body {
+    background-color: var(--color-paper);
+    color: var(--color-charcoal);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Layout Wrapper */
+  .admin-page { width: 100%; min-height: 100vh; display: flex; justify-content: center; padding: 3rem 1.5rem; }
+  .admin-wrap { width: 100%; max-width: 1280px; margin: 0 auto; }
+
+  /* Brand Header */
+  .admin-brand { margin-bottom: 2.5rem; text-align: center; }
+  .admin-brand .logo {
+    font-family: 'Newsreader', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-charcoal);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rsem;
+  }
+
+  /* Glass Panels & Forms */
+  .admin-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+  }
+
+  #login-view {
+    max-width: 440px;
+    margin: 6vh auto;
+    background: var(--glass-bg);
+    backdrop-filter: var(--blur-heavy);
+    -webkit-backdrop-filter: var(--blur-heavy);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-float);
+  }
+
+  /* Typography helpers */
+  .text-xl { font-size: 1.25rem; }
+  .text-2xl { font-size: 1.75rem; font-family: 'Newsreader', serif; font-weight: 400; letter-spacing: -0.02em; }
+  .text-lg { font-size: 1.125rem; font-family: 'Newsreader', serif; }
+  .text-sm { font-size: 0.875rem; }
+  .text-xs { font-size: 0.75rem; }
+  .text-gray { color: var(--color-gray); }
+  .font-medium { font-weight: 500; }
+  .text-center { text-align: center; }
+  .mb-1 { margin-bottom: 0.25rem; }
+  .mb-3 { margin-bottom: 0.75rem; }
+  .mb-4 { margin-bottom: 1rem; }
+  .mb-5 { margin-bottom: 1.25rem; }
+  .mb-6 { margin-bottom: 1.5rem; }
+  .mb-8 { margin-bottom: 2rem; }
+  .mt-1 { margin-top: 0.25rem; }
+  .mt-2 { margin-top: 0.5rem; }
+  .p-0 { padding: 0 !important; }
+  .p-5 { padding: 1.25rem; }
+  .pb-3 { padding-bottom: 0.75rem; }
+  .pt-4 { padding-top: 1rem; }
+  .border-b { border-bottom: 1px solid var(--color-line); }
+  .border-t { border-top: 1px solid var(--color-line); }
+  .border-dashed { border-style: dashed; }
+  .border-line { border-color: var(--color-line); }
+  .rounded-lg { border-radius: 14px; }
+  .bg-sand { background: #FAF9F5; }
+  .flex { display: flex; }
+  .flex-col { flex-direction: column; }
+  .flex-wrap { flex-wrap: wrap; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  .justify-center { justify-content: center; }
+  .gap-2 { gap: 0.5rem; }
+  .gap-3 { gap: 0.75rem; }
+  .gap-4 { gap: 1rem; }
+  .flex-1 { flex: 1; }
+  .w-full { width: 100%; }
+  .w-48 { width: 12rem; }
+  .w-40 { width: 10rem; }
+  .whitespace-nowrap { white-space: nowrap; }
+  .cursor-pointer { cursor: pointer; }
+  .hidden { display: none !important; }
+
+  /* Input fields */
+  .admin-input {
+    width: 100%;
+    background: #FAF9F5;
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--color-charcoal);
+    outline: none;
+    transition: var(--transition-smooth);
+    box-sizing: border-box;
+  }
+  .admin-input:focus {
+    background: #FFFFFF;
+    border-color: var(--color-charcoal);
+    box-shadow: 0 0 0 3px rgba(28, 28, 27, 0.04);
+  }
+  .field-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-charcoal-soft);
+    margin-bottom: 0.4rem;
+  }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.75rem 1.5rem; border-radius: 12px;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+    cursor: pointer; transition: var(--transition-smooth); text-decoration: none; border: none;
+  }
+  .btn-primary { background: var(--color-charcoal); color: #FFFFFF; }
+  .btn-primary:hover { background: #333331; transform: translateY(-1px); }
+  .btn-outline { background: transparent; border: 1px solid var(--color-line); color: var(--color-charcoal); }
+  .btn-outline:hover { background: rgba(0,0,0,0.02); border-color: var(--color-charcoal); }
+  .btn-blur { background: rgba(0,0,0,0.04); color: var(--color-charcoal); }
+  .btn-blur:hover { background: rgba(0,0,0,0.08); }
+  .btn-sm { padding: 0.4rem 0.875rem; border-radius: 8px; font-size: 0.8rem; }
+
+  /* Tabs Navigation */
+  .admin-tabs-container {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 16px;
+    padding: 0.4rem;
+    margin-bottom: 2rem;
+    display: inline-flex;
+    box-shadow: var(--shadow-card);
+  }
+  .admin-tabs { display: flex; gap: 0.25rem; width: 100%; }
+  .admin-tab {
+    background: transparent; border: none; padding: 0.6rem 1.5rem;
+    border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.85rem;
+    font-weight: 500; color: var(--color-charcoal-soft); cursor: pointer;
+    transition: var(--transition-smooth);
+  }
+  .admin-tab:hover { color: var(--color-charcoal); }
+  .admin-tab.active { background: var(--color-charcoal); color: #FFFFFF; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+  /* Stats Grid (Injected container styling) */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; }
+  .stats-grid > div {
+    background: var(--color-surface); border: 1px solid var(--color-line);
+    border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow-card);
+  }
+
+  /* Custom Checkbox */
+  .custom-checkbox {
+    appearance: none; width: 18px; height: 18px; border: 1px solid var(--color-line);
+    border-radius: 6px; background: #FAF9F5; cursor: pointer; position: relative; transition: var(--transition-smooth);
+  }
+  .custom-checkbox:checked { background: var(--color-charcoal); border-color: var(--color-charcoal); }
+  .custom-checkbox:checked::after {
+    content: ''; position: absolute; left: 5px; top: 2px; width: 5px; height: 9px;
+    border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
+  /* Table Customization */
+  .table-wrap { width: 100%; overflow-x: auto; }
+  .admin-table th {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--color-charcoal-soft); padding: 1rem 1.25rem; border-bottom: 1px solid var(--color-line);
+    background: #FAF9F5; font-weight: 600;
+  }
+  .admin-table td { padding: 1rem 1.25rem; border-bottom: 1px solid var(--color-line); font-size: 0.9rem; vertical-align: middle; }
+  .admin-table tr:last-child td { border-bottom: none; }
+
+  /* Animations */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+</style>
 </head>
 <body class="admin-body">
 
@@ -19,13 +225,14 @@
   <div class="admin-wrap">
 
     <div class="admin-brand fade-up">
-      <a href="/" class="logo flex items-center justify-center gap-2">
-        <svg class="w-6 h-6 text-sage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
+      <a href="/" class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
         Biochamelle Workspace
       </a>
     </div>
 
-    <div id="login-view" class="admin-panel hidden fade-up delay-1">
+    <!-- Login View -->
+    <div id="login-view" class="admin-panel hidden fade-up">
       <div class="text-center mb-6">
         <h2 class="text-xl font-medium">Welcome Back</h2>
         <p class="text-sm text-gray mt-1">Authenticate to access the dashboard</p>
@@ -43,15 +250,18 @@
       </form>
     </div>
 
-    <div id="dashboard-view" class="hidden fade-up delay-1">
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="hidden fade-up">
 
       <header class="admin-header flex justify-between items-center mb-8">
-        <h2 class="text-2xl font-medium">Overview</h2>
-        <button id="logout-btn" class="btn btn-outline btn-sm text-xs" type="button">Log out</button>
+        <h2 class="text-2xl">Overview</h2>
+        <button id="logout-btn" class="btn btn-outline btn-sm" type="button">Log out</button>
       </header>
 
+      <!-- Target Container: Stats -->
       <div id="stats" class="stats-grid mb-8"></div>
 
+      <!-- Navigation Tabs -->
       <div class="admin-tabs-container">
         <div class="admin-tabs">
           <button class="admin-tab active" data-tab="products" onclick="showSection('products')">Products</button>
@@ -60,9 +270,10 @@
         </div>
       </div>
 
-      <div id="section-products" class="hidden admin-section fade-in">
+      <!-- Products Section -->
+      <div id="section-products" class="hidden admin-section">
         <form id="product-form" class="admin-panel mb-8">
-          <h4 id="form-title" class="text-lg font-medium mb-5 border-b border-line pb-3">Add New Product</h4>
+          <h4 id="form-title" class="text-lg mb-5 border-b border-line pb-3">Add New Product</h4>
           <input type="hidden" id="p-id">
 
           <div class="form-grid mb-4">
@@ -93,12 +304,13 @@
               <button type="button" id="upload_widget" class="btn btn-outline btn-sm">Upload Images</button>
             </div>
             <p class="text-xs text-gray mb-4">Click an image to set as the primary thumbnail.</p>
+            <!-- Target Container: Uploaded Images -->
             <div id="uploaded-images-container" class="image-preview-container flex gap-3 flex-wrap"></div>
           </div>
 
           <div class="form-actions flex gap-3 pt-4 border-t border-line">
             <button type="submit" class="btn btn-primary">Save Product</button>
-            <button type="button" class="btn btn-blur text-charcoal" onclick="resetProductForm()">Clear Form</button>
+            <button type="button" class="btn btn-blur" onclick="resetProductForm()">Clear Form</button>
           </div>
         </form>
 
@@ -112,20 +324,24 @@
             <option value="out">Out of Stock</option>
           </select>
         </div>
+        <!-- Target Container: Products List -->
         <div id="admin-products-list" class="flex flex-col gap-3"></div>
       </div>
 
-      <div id="section-categories" class="hidden admin-section fade-in">
+      <!-- Categories Section -->
+      <div id="section-categories" class="hidden admin-section">
         <form id="cat-form" class="flex gap-3 mb-8 admin-panel">
           <input type="text" id="cat-name" class="admin-input flex-1" placeholder="New category name (e.g. Solid Shampoos)" required>
           <button type="submit" class="btn btn-primary whitespace-nowrap">Add Category</button>
         </form>
+        <!-- Target Container: Category List -->
         <ul id="admin-cat-list" class="cat-list flex flex-col gap-2"></ul>
       </div>
 
-      <div id="section-orders" class="hidden admin-section fade-in">
+      <!-- Orders Section -->
+      <div id="section-orders" class="hidden admin-section">
         <div class="admin-toolbar flex gap-3 mb-6 flex-wrap">
-          <input type="search" id="order-search" class="admin-input flex-1 min-w-[200px]" placeholder="Search by name, phone, or wilaya...">
+          <input type="search" id="order-search" class="admin-input flex-1" placeholder="Search by name, phone, or wilaya...">
           <select id="order-filter" class="admin-input w-40" aria-label="Filter by status">
             <option value="">All Orders</option>
             <option value="new">New</option>
@@ -134,11 +350,11 @@
             <option value="delivered">Delivered</option>
             <option value="cancelled">Cancelled</option>
           </select>
-          <button type="button" id="export-orders" class="btn btn-outline text-sm">Export CSV</button>
+          <button type="button" id="export-orders" class="btn btn-outline">Export CSV</button>
         </div>
 
         <div class="admin-panel p-0 overflow-hidden">
-          <div class="table-wrap overflow-x-auto">
+          <div class="table-wrap">
             <table class="admin-table w-full text-left border-collapse">
               <thead>
                 <tr>
@@ -150,6 +366,7 @@
                   <th>Actions</th>
                 </tr>
               </thead>
+              <!-- Target Container: Orders Table -->
               <tbody id="orders-table-body"></tbody>
             </table>
           </div>
@@ -160,6 +377,7 @@
   </div>
 </div>
 
+<!-- Preserved Module Scripts -->
 <script type="module" src="/js/supabase-client.js"></script>
 <script type="module" src="/js/admin.js"></script>
 </body>
