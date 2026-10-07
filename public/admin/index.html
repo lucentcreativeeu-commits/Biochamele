@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 <link rel="manifest" href="/img/manifest.json">
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex">
-<title>Admin Workspace — Biochamelle</title>
+<title>Espace Admin — Biochamelle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
@@ -232,26 +232,26 @@
     <div class="admin-brand fade-up">
       <a href="/" class="logo">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
-        Biochamelle Workspace
+        Espace Biochamelle
       </a>
     </div>
 
     <!-- Login View -->
     <div id="login-view" class="admin-panel hidden fade-up">
       <div class="text-center mb-6">
-        <h2 class="text-xl font-medium">Welcome Back</h2>
-        <p class="text-sm text-gray mt-1">Authenticate to access the dashboard</p>
+        <h2 class="text-xl font-medium">Bienvenue</h2>
+        <p class="text-sm text-gray mt-1">Connectez-vous pour accéder au tableau de bord</p>
       </div>
       <form id="login-form" class="flex flex-col gap-4">
         <div class="form-group">
-          <label for="email" class="field-label">Email</label>
+          <label for="email" class="field-label">Adresse e-mail</label>
           <input type="email" id="email" class="admin-input" placeholder="admin@biochamelle.com" required>
         </div>
         <div class="form-group">
-          <label for="password" class="field-label">Password</label>
+          <label for="password" class="field-label">Mot de passe</label>
           <input type="password" id="password" class="admin-input" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn btn-primary w-full mt-2">Authenticate</button>
+        <button type="submit" class="btn btn-primary w-full mt-2">Se connecter</button>
       </form>
     </div>
 
@@ -259,8 +259,8 @@
     <div id="dashboard-view" class="hidden fade-up">
 
       <header class="admin-header flex justify-between items-center mb-8">
-        <h2 class="text-2xl">Overview</h2>
-        <button id="logout-btn" class="btn btn-outline btn-sm" type="button">Log out</button>
+        <h2 class="text-2xl">Vue d'ensemble</h2>
+        <button id="logout-btn" class="btn btn-outline btn-sm" type="button">Déconnexion</button>
       </header>
 
       <!-- Target Container: Stats -->
@@ -269,23 +269,23 @@
       <!-- Navigation Tabs -->
       <div class="admin-tabs-container">
         <div class="admin-tabs">
-          <button class="admin-tab active" data-tab="products" onclick="showSection('products')">Products</button>
-          <button class="admin-tab" data-tab="categories" onclick="showSection('categories')">Categories</button>
-          <button class="admin-tab" data-tab="orders" onclick="showSection('orders')">Orders</button>
+          <button class="admin-tab active" data-tab="products" onclick="showSection('products')">Produits</button>
+          <button class="admin-tab" data-tab="categories" onclick="showSection('categories')">Catégories</button>
+          <button class="admin-tab" data-tab="orders" onclick="showSection('orders')">Commandes</button>
         </div>
       </div>
 
       <!-- Products Section -->
       <div id="section-products" class="hidden admin-section">
         <form id="product-form" class="admin-panel mb-8">
-          <h4 id="form-title" class="text-lg mb-5 border-b border-line pb-3">Add New Product</h4>
+          <h4 id="form-title" class="text-lg mb-5 border-b border-line pb-3">Ajouter un produit</h4>
           <input type="hidden" id="p-id">
 
           <div class="form-grid mb-4">
-            <div class="form-group"><label class="field-label">Name</label><input type="text" id="p-name" class="admin-input" required></div>
-            <div class="form-group"><label class="field-label">Price (DZD)</label><input type="number" id="p-price" class="admin-input" min="0" step="any" required></div>
-            <div class="form-group"><label class="field-label">Category</label><select id="p-category" class="admin-input"></select></div>
-            <div class="form-group"><label class="field-label">Stock</label><input type="number" id="p-stock" class="admin-input" min="0" required></div>
+            <div class="form-group"><label class="field-label">Nom du produit</label><input type="text" id="p-name" class="admin-input" required></div>
+            <div class="form-group"><label class="field-label">Prix (DZD)</label><input type="number" id="p-price" class="admin-input" min="0" step="any" required></div>
+            <div class="form-group"><label class="field-label">Catégorie</label><select id="p-category" class="admin-input"></select></div>
+            <div class="form-group"><label class="field-label">Stock disponible</label><input type="number" id="p-stock" class="admin-input" min="0" required></div>
           </div>
 
           <div class="form-group mb-4">
@@ -294,39 +294,39 @@
           </div>
 
           <div class="form-grid mb-6">
-            <div class="form-group"><label class="field-label">Sizes (comma separated)</label><input type="text" id="p-sizes" class="admin-input" placeholder="e.g. 100g, 150g"></div>
-            <div class="form-group"><label class="field-label">Colors (comma separated)</label><input type="text" id="p-colors" class="admin-input" placeholder="e.g. Amber, Charcoal"></div>
+            <div class="form-group"><label class="field-label">Tailles (séparées par des virgules)</label><input type="text" id="p-sizes" class="admin-input" placeholder="ex. 100 g, 150 g"></div>
+            <div class="form-group"><label class="field-label">Couleurs (séparées par des virgules)</label><input type="text" id="p-colors" class="admin-input" placeholder="ex. Ambre, Charbon"></div>
           </div>
 
           <label class="check-row flex items-center gap-2 mb-6 cursor-pointer">
             <input type="checkbox" id="p-active" class="custom-checkbox" checked>
-            <span class="text-sm font-medium">Visible in the shop</span>
+            <span class="text-sm font-medium">Visible sur la boutique</span>
           </label>
 
           <div class="upload-box p-5 border border-dashed border-line rounded-lg bg-sand mb-6">
             <div class="flex justify-between items-center mb-3">
-              <label class="field-label mb-0">Product Imagery (Max 6)</label>
-              <button type="button" id="upload_widget" class="btn btn-outline btn-sm">Upload Images</button>
+              <label class="field-label mb-0">Images du produit (max. 6)</label>
+              <button type="button" id="upload_widget" class="btn btn-outline btn-sm">Ajouter des photos</button>
             </div>
-            <p class="text-xs text-gray mb-4">Click an image to set as the primary thumbnail.</p>
+            <p class="text-xs text-gray mb-4">Cliquez sur une image pour la définir comme photo principale.</p>
             <!-- Target Container: Uploaded Images -->
             <div id="uploaded-images-container" class="image-preview-container flex gap-3 flex-wrap"></div>
           </div>
 
           <div class="form-actions flex gap-3 pt-4 border-t border-line">
-            <button type="submit" class="btn btn-primary">Save Product</button>
-            <button type="button" class="btn btn-blur" onclick="resetProductForm()">Clear Form</button>
+            <button type="submit" class="btn btn-primary">Enregistrer le produit</button>
+            <button type="button" class="btn btn-blur" onclick="resetProductForm()">Réinitialiser le formulaire</button>
           </div>
         </form>
 
         <div class="admin-toolbar flex gap-3 mb-6">
-          <input type="search" id="product-search" class="admin-input flex-1" placeholder="Search products...">
-          <select id="product-filter" class="admin-input w-48" aria-label="Filter products">
-            <option value="">All Statuses</option>
+          <input type="search" id="product-search" class="admin-input flex-1" placeholder="Rechercher un produit...">
+          <select id="product-filter" class="admin-input w-48" aria-label="Filtrer les produits">
+            <option value="">Tous les statuts</option>
             <option value="active">Visible</option>
-            <option value="inactive">Hidden</option>
-            <option value="low">Low Stock</option>
-            <option value="out">Out of Stock</option>
+            <option value="inactive">Masqué</option>
+            <option value="low">Stock faible</option>
+            <option value="out">En rupture</option>
           </select>
         </div>
         <!-- Target Container: Products List -->
@@ -336,8 +336,8 @@
       <!-- Categories Section -->
       <div id="section-categories" class="hidden admin-section">
         <form id="cat-form" class="flex gap-3 mb-8 admin-panel">
-          <input type="text" id="cat-name" class="admin-input flex-1" placeholder="New category name (e.g. Solid Shampoos)" required>
-          <button type="submit" class="btn btn-primary whitespace-nowrap">Add Category</button>
+          <input type="text" id="cat-name" class="admin-input flex-1" placeholder="Nom de la nouvelle catégorie (ex. Savons solides)" required>
+          <button type="submit" class="btn btn-primary whitespace-nowrap">Ajouter une catégorie</button>
         </form>
         <!-- Target Container: Category List -->
         <ul id="admin-cat-list" class="cat-list flex flex-col gap-2"></ul>
@@ -346,16 +346,16 @@
       <!-- Orders Section -->
       <div id="section-orders" class="hidden admin-section">
         <div class="admin-toolbar flex gap-3 mb-6 flex-wrap">
-          <input type="search" id="order-search" class="admin-input flex-1" placeholder="Search by name, phone, or wilaya...">
-          <select id="order-filter" class="admin-input w-40" aria-label="Filter by status">
-            <option value="">All Orders</option>
-            <option value="new">New</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
+          <input type="search" id="order-search" class="admin-input flex-1" placeholder="Rechercher par nom, téléphone ou wilaya...">
+          <select id="order-filter" class="admin-input w-40" aria-label="Filtrer par statut">
+            <option value="">Toutes les commandes</option>
+            <option value="new">Nouvelles</option>
+            <option value="confirmed">Confirmées</option>
+            <option value="shipped">Expédiées</option>
+            <option value="delivered">Livrées</option>
+            <option value="cancelled">Annulées</option>
           </select>
-          <button type="button" id="export-orders" class="btn btn-outline">Export CSV</button>
+          <button type="button" id="export-orders" class="btn btn-outline">Exporter en CSV</button>
         </div>
 
         <div class="admin-panel p-0 overflow-hidden">
@@ -364,10 +364,10 @@
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>Customer Details</th>
-                  <th>Products</th>
+                  <th>Détails Client</th>
+                  <th>Produits</th>
                   <th>Total</th>
-                  <th>Status</th>
+                  <th>Statut</th>
                   <th>Actions</th>
                 </tr>
               </thead>

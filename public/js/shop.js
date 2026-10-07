@@ -9,7 +9,7 @@ async function loadShop() {
     // 1. Filters
     const { data: categories } = await sb.from('categories').select('*');
     const filterList = document.getElementById('filter-list');
-    filterList.innerHTML = `<a href="/shop" class="chip ${selectedCat ? '' : 'active'}">All</a>` +
+    filterList.innerHTML = `<a href="/shop" class="chip ${selectedCat ? '' : 'active'}">Tous les produits</a>` +
         (categories || []).map(cat =>
             `<a href="/shop?category=${cat.id}" class="chip ${selectedCat == cat.id ? 'active' : ''}">${esc(cat.name)}</a>`
         ).join('');
@@ -31,7 +31,7 @@ async function loadShop() {
     function renderProducts(products) {
         const grid = document.getElementById('product-grid');
         if (!products || products.length === 0) {
-            grid.innerHTML = '<p class="empty">No products found.</p>';
+            grid.innerHTML = '<p class="empty">Aucun produit disponible pour le moment.</p>';
             return;
         }
         grid.innerHTML = products.map(productCard).join('');

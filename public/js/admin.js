@@ -42,7 +42,7 @@ const slugify = (name) =>
 // ---------- init / auth ----------
 async function initAdmin() {
     sb = await getSupabase();
-    if (!sb) { toast('Configuration error: check your environment variables', true); return; }
+    if (!sb) { toast('Erreur de configuration : vérifiez vos variables d’environnement', true); return; }
 
     const { data: { session } } = await sb.auth.getSession();
     if (session) await enterDashboard();
@@ -55,7 +55,7 @@ async function enterDashboard() {
         await sb.auth.signOut();
         $('dashboard-view').classList.add('hidden');
         $('login-view').classList.remove('hidden');
-        toast('This account does not have admin access', true);
+        toast('Ce compte ne dispose pas des droits administrateur', true);
         return;
     }
     $('login-view').classList.add('hidden');
@@ -70,7 +70,7 @@ $('login-form').addEventListener('submit', async (e) => {
         email: $('email').value.trim(),
         password: $('password').value
     });
-    if (error) return fail('Login failed', error);
+    if (error) return fail('Échec de la connexion', error);
     await enterDashboard();
 });
 
@@ -95,10 +95,10 @@ async function loadStats() {
     const { data, error } = await sb.rpc('admin_stats');
     if (error || !data) return;
     const items = [
-        ['New orders', data.orders_new],
-        ['Delivered revenue (30 days)', money(data.revenue_30d)],
-        ['Low stock', data.low_stock],
-        ['Out of stock', data.out_of_stock]
+        ['Nouvelles commandes', data.orders_new],
+        ['Chiffre d’affaires (30 derniers jours)', money(data.revenue_30d)],
+        ['Stock faible', data.low_stock],
+        ['En rupture de stock', data.out_of_stock]
     ];
     $('stats').innerHTML = items.map(([label, value]) =>
         `<div class="stat"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
@@ -109,7 +109,7 @@ function initCloudinary() {
     if (cloudinaryReady) return;
     const config = getCloudinaryConfig();
     if (!config?.cloudName || !config?.preset) {
-        toast('Cloudinary is not configured (CLOUDINARY_CLOUD_NAME / CLOUDINARY_PRESET)', true);
+        toast('Cloudinary n’est pas configuré (CLOUDINARY_CLOUD_NAME / CLOUDINARY_PRESET)', true);
         return;
     }
     const widget = cloudinary.createUploadWidget({
@@ -122,7 +122,7 @@ function initCloudinary() {
         maxImageFileSize: 5000000,
         folder: 'ecommerce-products'
     }, (error, result) => {
-        if (error) return fail('Upload error', error);
+        if (error) return fail('Erreur lors de l’envoi', error);
         if (result?.event === 'success') addImageToState(result.info.secure_url);
     });
 
@@ -131,7 +131,7 @@ function initCloudinary() {
 }
 
 function addImageToState(url) {
-    if (uploadedImages.length >= MAX_IMAGES) return toast(`Maximum ${MAX_IMAGES} images`, true);
+    if (uploadedImages.length >= MAX_IMAGES) return toast(`${MAX_IMAGES} images maximum`, true);
     uploadedImages.push(url);
     renderImages();
 }
@@ -160,12 +160,12 @@ async function loadProducts() {
         sb.from('products').select('*, categories(name)').order('created_at', { ascending: false }),
         sb.from('categories').select('*').order('name')
     ]);
-    if (error) return fail('Failed to load products', error);
+    if (error) return fail('Échec du chargement des produits', error);
 
     productsCache = products || [];
     const sel = $('p-category');
     const current = sel.value;
-    sel.innerHTML = '<option value="">No category</option>' +
+    sel.innerHTML = '<option value="">Aucune catégorie</option>' +
         (cats || []).map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
     sel.value = current;
 
@@ -191,19 +191,19 @@ function renderProducts() {
                 <img src="${esc(p.image_url || FALLBACK_IMG)}" alt="">
                 <div>
                     <strong>${esc(p.name)}</strong> (${money(p.price)})<br>
-                    <small>${esc(p.categories?.name || 'No category')} |
-                    <span class="${p.active ? 'on' : 'off'}">${p.active ? 'Active' : 'Hidden'}</span>
-                    ${p.stock === 0 ? ' | <b>Out of stock</b>' : p.stock <= LOW_STOCK ? ' | <b>Low stock</b>' : ''}</small>
+                    <small>${esc(p.categories?.name || 'Aucune catégorie')} |
+                    <span class="${p.active ? 'on' : 'off'}">${p.active ? 'Visible' : 'Masqué'}</span>
+                    ${p.stock === 0 ? ' | <b>En rupture de stock</b>' : p.stock <= LOW_STOCK ? ' | <b>Stock faible</b>' : ''}</small>
                 </div>
             </div>
             <div class="row-actions">
-                <input type="number" min="0" class="stock-input" value="${p.stock}" title="Stock"
+                <input type="number" min="0" class="stock-input" value="${p.stock}" title="Stock disponible"
                        onchange="updateStock(${p.id}, this.value)">
-                <button class="btn btn-outline btn-sm" onclick="toggleActive(${p.id})">${p.active ? 'Hide' : 'Show'}</button>
-                <button class="btn btn-outline btn-sm" onclick="editProduct(${p.id})">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">Delete</button>
+                <button class="btn btn-outline btn-sm" onclick="toggleActive(${p.id})">${p.active ? 'Masquer' : 'Afficher'}</button>
+                <button class="btn btn-outline btn-sm" onclick="editProduct(${p.id})">Modifier</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">Supprimer</button>
             </div>
-        </div>`).join('') : '<p class="empty">No products match.</p>';
+        </div>`).join('') : '<p class="empty">Aucun produit ne correspond à votre recherche.</p>';
 }
 
 $('product-search').addEventListener('input', renderProducts);
@@ -212,8 +212,8 @@ $('product-filter').addEventListener('change', renderProducts);
 window.updateStock = async (id, value) => {
     const stock = Math.max(0, parseInt(value, 10) || 0);
     const { error } = await sb.from('products').update({ stock }).eq('id', id);
-    if (error) return fail('Failed to update stock', error);
-    toast('Stock updated');
+    if (error) return fail('Échec de la mise à jour du stock', error);
+    toast('Stock mis à jour');
     loadProducts();
     loadStats();
 };
@@ -222,7 +222,7 @@ window.toggleActive = async (id) => {
     const p = productsCache.find((x) => x.id === id);
     if (!p) return;
     const { error } = await sb.from('products').update({ active: !p.active }).eq('id', id);
-    if (error) return fail('Failed to update product', error);
+    if (error) return fail('Échec de la mise à jour du produit', error);
     loadProducts();
     loadStats();
 };
@@ -230,7 +230,7 @@ window.toggleActive = async (id) => {
 window.resetProductForm = () => {
     $('product-form').reset();
     $('p-id').value = '';
-    $('form-title').textContent = 'Add product';
+    $('form-title').textContent = 'Ajouter un produit';
     uploadedImages = [];
     mainImageIndex = 0;
     renderImages();
@@ -249,7 +249,7 @@ window.editProduct = (id) => {
     $('p-sizes').value = (p.sizes || []).join(',');
     $('p-colors').value = (p.colors || []).join(',');
     $('p-active').checked = p.active;
-    $('form-title').textContent = `Editing: ${p.name}`;
+    $('form-title').textContent = `Modification : ${p.name}`;
 
     uploadedImages = [...(p.gallery || [])];
     if (p.image_url && !uploadedImages.includes(p.image_url)) uploadedImages.unshift(p.image_url);
@@ -260,13 +260,13 @@ window.editProduct = (id) => {
 
 $('product-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!uploadedImages.length) return toast('Please upload at least one image', true);
+    if (!uploadedImages.length) return toast('Veuillez ajouter au moins une image', true);
 
     const id = $('p-id').value;
     const name = $('p-name').value.trim();
     const price = parseFloat($('p-price').value);
     const stock = parseInt($('p-stock').value, 10);
-    if (!name || !(price >= 0) || !(stock >= 0)) return toast('Check name, price and stock', true);
+    if (!name || !(price >= 0) || !(stock >= 0)) return toast('Vérifiez le nom, le prix et le stock', true);
 
     const list = (v) => v.split(',').map((s) => s.trim()).filter(Boolean);
     const sizes = list($('p-sizes').value);
@@ -289,19 +289,19 @@ $('product-form').addEventListener('submit', async (e) => {
     const { error } = id
         ? await sb.from('products').update(payload).eq('id', id)
         : await sb.from('products').insert([payload]);
-    if (error) return fail('Failed to save product', error);
+    if (error) return fail('Échec de l’enregistrement du produit', error);
 
-    toast('Product saved');
+    toast('Produit enregistré');
     resetProductForm();
     loadProducts();
     loadStats();
 });
 
 window.deleteProduct = async (id) => {
-    if (!confirm('Delete this product? Past orders are kept. (Use "Hide" if you only want it off the shop.)')) return;
+    if (!confirm('Supprimer ce produit ? Les commandes passées seront conservées. Choisissez « Masquer » pour le retirer uniquement de la boutique.')) return;
     const { error } = await sb.from('products').delete().eq('id', id);
-    if (error) return fail('Failed to delete', error);
-    toast('Product deleted');
+    if (error) return fail('Échec de la suppression', error);
+    toast('Produit supprimé');
     loadProducts();
     loadStats();
 };
@@ -309,17 +309,17 @@ window.deleteProduct = async (id) => {
 // ---------- categories ----------
 async function loadCategories() {
     const { data, error } = await sb.from('categories').select('*, products(count)').order('name');
-    if (error) return fail('Failed to load categories', error);
+    if (error) return fail('Échec du chargement des catégories', error);
 
     categoriesCache = data || [];
     $('admin-cat-list').innerHTML = categoriesCache.map((c) => {
         const count = c.products?.[0]?.count ?? 0;
-        return `<li><span>${esc(c.name)} <small>(${count} products)</small></span>
+        return `<li><span>${esc(c.name)} <small>(${count} produits)</small></span>
             <span>
-                <button class="btn btn-outline btn-sm" onclick="renameCat(${c.id})">Rename</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteCat(${c.id}, ${count})">Delete</button>
+                <button class="btn btn-outline btn-sm" onclick="renameCat(${c.id})">Renommer</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCat(${c.id}, ${count})">Supprimer</button>
             </span></li>`;
-    }).join('') || '<li>No categories yet.</li>';
+    }).join('') || '<li>Aucune catégorie pour le moment.</li>';
 }
 
 $('cat-form').addEventListener('submit', async (e) => {
@@ -327,27 +327,27 @@ $('cat-form').addEventListener('submit', async (e) => {
     const name = $('cat-name').value.trim();
     if (!name) return;
     const { error } = await sb.from('categories').insert([{ name }]);
-    if (error) return fail('Failed to add category', error);
+    if (error) return fail('Échec de l’ajout de la catégorie', error);
     $('cat-name').value = '';
     loadCategories();
 });
 
 window.renameCat = async (id) => {
     const current = categoriesCache.find((c) => c.id === id)?.name || '';
-    const name = prompt('New category name', current)?.trim();
+    const name = prompt('Nom de la nouvelle catégorie', current)?.trim();
     if (!name || name === current) return;
     const { error } = await sb.from('categories').update({ name }).eq('id', id);
-    if (error) return fail('Failed to rename', error);
+    if (error) return fail('Échec du renommage', error);
     loadCategories();
 };
 
 window.deleteCat = async (id, count) => {
     const msg = count
-        ? `This category has ${count} product(s). They will stay but have no category. Delete it?`
-        : 'Delete this category?';
+        ? `Cette catégorie contient ${count} produit(s). Ils seront conservés sans catégorie. La supprimer ?`
+        : 'Supprimer cette catégorie ?';
     if (!confirm(msg)) return;
     const { error } = await sb.from('categories').delete().eq('id', id);
-    if (error) return fail('Failed to delete', error);
+    if (error) return fail('Échec de la suppression', error);
     loadCategories();
 };
 
@@ -355,7 +355,7 @@ window.deleteCat = async (id, count) => {
 async function loadOrders() {
     const { data, error } = await sb.from('orders').select('*')
         .order('created_at', { ascending: false }).limit(500);
-    if (error) return fail('Failed to load orders', error);
+    if (error) return fail('Échec du chargement des commandes', error);
     ordersCache = data || [];
     renderOrders();
 }
@@ -368,6 +368,15 @@ function filteredOrders() {
         (!q || [o.customer_name, o.phone, o.wilaya, o.product_name].some((v) => String(v || '').toLowerCase().includes(q))));
 }
 
+const ORDER_STATUS_LABELS = {
+    new: 'Nouvelle',
+    confirmed: 'Confirmée',
+    shipped: 'Expédiée',
+    delivered: 'Livrée',
+    cancelled: 'Annulée',
+    returned: 'Retournée'
+};
+
 function renderOrders() {
     const rows = filteredOrders();
     $('orders-table-body').innerHTML = rows.length ? rows.map((o) => `
@@ -376,22 +385,22 @@ function renderOrders() {
             <td>
                 <strong>${esc(o.customer_name)}</strong><br>
                 <span class="phone-links">${esc(o.phone)}
-                    <a href="tel:${esc(o.phone)}">Call</a>
+                    <a href="tel:${esc(o.phone)}">Appeler</a>
                     <a href="https://wa.me/${waNumber(o.phone)}" target="_blank" rel="noopener">WhatsApp</a></span><br>
                 ${esc(o.wilaya)}${o.baladia ? ', ' + esc(o.baladia) : ''}${o.address ? '<br>' + esc(o.address) : ''}
                 ${o.delivery_type ? `<br><small>${esc(o.delivery_type)}</small>` : ''}
-                ${o.notes ? `<br><small class="order-note">Note: ${esc(o.notes)}</small>` : ''}
+                ${o.notes ? `<br><small class="order-note">Note : ${esc(o.notes)}</small>` : ''}
             </td>
-            <td>${esc(o.product_name || 'Deleted product')} × ${o.quantity}
+            <td>${esc(o.product_name || 'Produit supprimé')} × ${o.quantity}
                 ${o.size || o.color ? `<br><small>${esc([o.size, o.color].filter(Boolean).join(' / '))}</small>` : ''}</td>
             <td>${money(o.total_price)}</td>
             <td>
                 <select class="status-${esc(o.status)}" onchange="setOrderStatus(${o.id}, this.value)">
-                    ${ORDER_STATUSES.map((s) => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${s}</option>`).join('')}
+                    ${ORDER_STATUSES.map((s) => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${ORDER_STATUS_LABELS[s]}</option>`).join('')}
                 </select>
             </td>
             <td><button class="btn btn-outline btn-sm" onclick="editNote(${o.id})">Note</button></td>
-        </tr>`).join('') : '<tr><td colspan="6">No orders match.</td></tr>';
+        </tr>`).join('') : '<tr><td colspan="6">Aucune commande trouvée.</td></tr>';
 }
 
 $('order-search').addEventListener('input', renderOrders);
@@ -400,18 +409,18 @@ $('order-filter').addEventListener('change', renderOrders);
 // Stock is adjusted by a database trigger when an order enters/leaves "delivered".
 window.setOrderStatus = async (id, status) => {
     const { error } = await sb.from('orders').update({ status }).eq('id', id);
-    if (error) fail('Failed to update order', error);
-    else toast(status === 'delivered' ? 'Delivered — stock updated' : 'Order updated');
+    if (error) fail('Échec de la mise à jour de la commande', error);
+    else toast(status === 'delivered' ? 'Commande livrée — stock mis à jour' : 'Commande mise à jour');
     loadOrders();
     loadStats();
 };
 
 window.editNote = async (id) => {
     const o = ordersCache.find((x) => x.id === id);
-    const notes = prompt('Internal note', o?.notes || '');
+    const notes = prompt('Note interne', o?.notes || '');
     if (notes === null) return;
     const { error } = await sb.from('orders').update({ notes: notes.trim() || null }).eq('id', id);
-    if (error) return fail('Failed to save note', error);
+    if (error) return fail('Échec de l’enregistrement de la note', error);
     loadOrders();
 };
 
@@ -421,7 +430,7 @@ $('export-orders').addEventListener('click', () => {
         if (/^[=+\-@]/.test(s)) s = "'" + s; // avoid spreadsheet formula injection
         return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
     };
-    const head = ['Date', 'Customer', 'Phone', 'Wilaya', 'Baladia', 'Address', 'Product', 'Qty', 'Size', 'Color', 'Total', 'Status', 'Note'];
+    const head = ['Date', 'Client', 'Téléphone', 'Wilaya', 'Baladia', 'Adresse', 'Produit', 'Quantité', 'Taille', 'Couleur', 'Total', 'Statut', 'Note'];
     const lines = filteredOrders().map((o) => [
         new Date(o.created_at).toISOString(), o.customer_name, o.phone, o.wilaya, o.baladia, o.address,
         o.product_name, o.quantity, o.size, o.color, o.total_price, o.status, o.notes

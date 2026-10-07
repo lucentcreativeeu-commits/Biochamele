@@ -19,7 +19,7 @@ async function loadHome() {
         if (data && data.length > 0) {
             window.location.href = `/product?slug=${data[0].slug}`;
         } else {
-            alert('Product not found. Try looking in the shop.');
+            alert('Produit introuvable. Essayez de parcourir la boutique.');
             window.location.href = `/shop`;
         }
     };
@@ -52,7 +52,7 @@ async function loadHome() {
             .limit(12);
 
         const list = products || [];
-        rail.innerHTML = list.length ? list.map(productCard).join('') : '<p class="empty">No products yet.</p>';
+        rail.innerHTML = list.length ? list.map(productCard).join('') : '<p class="empty">Nos prochaines pépites arrivent très bientôt !</p>';
 
         const railPrev = document.getElementById('rail-prev');
         const railNext = document.getElementById('rail-next');
@@ -63,7 +63,7 @@ async function loadHome() {
         const trending = document.getElementById('trending-products');
         if (trending) {
             const picks = [...list].sort(() => 0.5 - Math.random()).slice(0, 4);
-            trending.innerHTML = picks.length ? picks.map(productCard).join('') : '<p class="empty">No products yet.</p>';
+            trending.innerHTML = picks.length ? picks.map(productCard).join('') : '<p class="empty">Nos prochaines pépites arrivent très bientôt !</p>';
         }
     }
 }
