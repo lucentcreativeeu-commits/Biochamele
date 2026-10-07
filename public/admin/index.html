@@ -3,80 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Biochamelle</title>
+<meta name="robots" content="noindex">
+<title>Admin Workspace — Biochamelle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/admin-extras.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 </head>
-<body>
-<div class="admin-page"><div class="admin-wrap">
-  <div class="admin-brand"><a href="/" class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>Biochamelle</a></div>
+<body class="admin-body">
 
-  <div id="login-view" class="panel hidden">
-    <h2>Admin login</h2>
-    <form id="login-form">
-      <div class="form-group"><label for="email">Email</label><input type="email" id="email" required></div>
-      <div class="form-group"><label for="password">Password</label><input type="password" id="password" required></div>
-      <button type="submit" class="btn btn-block">Log in</button>
-    </form>
-  </div>
+<div class="admin-page">
+  <div class="admin-wrap">
 
-  <div id="dashboard-view" class="panel hidden">
-    <div class="admin-header"><h2>Dashboard</h2><button id="logout-btn" class="btn btn-danger btn-sm" type="button">Log out</button></div>
-    <div class="tabs">
-      <button class="tab" data-tab="products" onclick="showSection('products')">Products</button>
-      <button class="tab" data-tab="categories" onclick="showSection('categories')">Categories</button>
-      <button class="tab" data-tab="orders" onclick="showSection('orders')">Orders</button>
+    <div class="admin-brand fade-up">
+      <a href="/" class="logo flex items-center justify-center gap-2">
+        <svg class="w-6 h-6 text-sage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
+        Biochamelle Workspace
+      </a>
     </div>
 
-    <div id="section-products" class="hidden">
-      <form id="product-form" class="admin-form">
-        <h4>Add / edit product</h4>
-        <input type="hidden" id="p-id">
-        <div class="form-grid">
-          <input type="text" id="p-name" placeholder="Name" required>
-          <input type="number" id="p-price" placeholder="Price (DZD)" required>
-          <select id="p-category"></select>
-          <input type="number" id="p-stock" placeholder="Stock quantity" required>
+    <div id="login-view" class="admin-panel hidden fade-up delay-1">
+      <div class="text-center mb-6">
+        <h2 class="text-xl font-medium">Welcome Back</h2>
+        <p class="text-sm text-gray mt-1">Authenticate to access the dashboard</p>
+      </div>
+      <form id="login-form" class="flex flex-col gap-4">
+        <div class="form-group">
+          <label for="email" class="field-label">Email</label>
+          <input type="email" id="email" class="admin-input" placeholder="admin@biochamelle.com" required>
         </div>
-        <textarea id="p-desc" rows="3" placeholder="Description" style="margin-bottom:12px"></textarea>
-        <div class="form-grid">
-          <div><label class="field-label">Sizes (comma separated, e.g. S,M,L)</label><input type="text" id="p-sizes"></div>
-          <div><label class="field-label">Colors (comma separated, e.g. Red,Blue)</label><input type="text" id="p-colors"></div>
+        <div class="form-group">
+          <label for="password" class="field-label">Password</label>
+          <input type="password" id="password" class="admin-input" placeholder="••••••••" required>
         </div>
-        <div class="upload-box">
-          <label class="field-label">Images (max 6)</label>
-          <button type="button" id="upload_widget" class="btn btn-outline btn-sm">Upload images</button>
-          <p class="hint">Click an image to make it the main thumbnail (green border).</p>
-          <div id="uploaded-images-container" class="image-preview-container"></div>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-olive">Save product</button>
-          <button type="button" class="btn btn-outline" onclick="resetProductForm()">Clear form</button>
-        </div>
+        <button type="submit" class="btn btn-primary w-full mt-2">Authenticate</button>
       </form>
-      <div id="admin-products-list"></div>
     </div>
 
-    <div id="section-categories" class="hidden">
-      <form id="cat-form" class="cat-form">
-        <input type="text" id="cat-name" placeholder="New category name" required>
-        <button type="submit" class="btn">Add category</button>
-      </form>
-      <ul id="admin-cat-list" class="cat-list"></ul>
-    </div>
+    <div id="dashboard-view" class="hidden fade-up delay-1">
 
-    <div id="section-orders" class="hidden">
-      <div class="table-wrap"><table class="table">
-        <thead><tr><th>Date</th><th>Customer / address</th><th>Product</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
-        <tbody id="orders-table-body"></tbody>
-      </table></div>
+      <header class="admin-header flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-medium">Overview</h2>
+        <button id="logout-btn" class="btn btn-outline btn-sm text-xs" type="button">Log out</button>
+      </header>
+
+      <div id="stats" class="stats-grid mb-8"></div>
+
+      <div class="admin-tabs-container">
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-tab="products" onclick="showSection('products')">Products</button>
+          <button class="admin-tab" data-tab="categories" onclick="showSection('categories')">Categories</button>
+          <button class="admin-tab" data-tab="orders" onclick="showSection('orders')">Orders</button>
+        </div>
+      </div>
+
+      <div id="section-products" class="hidden admin-section fade-in">
+        <form id="product-form" class="admin-panel mb-8">
+          <h4 id="form-title" class="text-lg font-medium mb-5 border-b border-line pb-3">Add New Product</h4>
+          <input type="hidden" id="p-id">
+
+          <div class="form-grid mb-4">
+            <div class="form-group"><label class="field-label">Name</label><input type="text" id="p-name" class="admin-input" required></div>
+            <div class="form-group"><label class="field-label">Price (DZD)</label><input type="number" id="p-price" class="admin-input" min="0" step="any" required></div>
+            <div class="form-group"><label class="field-label">Category</label><select id="p-category" class="admin-input"></select></div>
+            <div class="form-group"><label class="field-label">Stock</label><input type="number" id="p-stock" class="admin-input" min="0" required></div>
+          </div>
+
+          <div class="form-group mb-4">
+            <label class="field-label">Description</label>
+            <textarea id="p-desc" rows="3" class="admin-input"></textarea>
+          </div>
+
+          <div class="form-grid mb-6">
+            <div class="form-group"><label class="field-label">Sizes (comma separated)</label><input type="text" id="p-sizes" class="admin-input" placeholder="e.g. 100g, 150g"></div>
+            <div class="form-group"><label class="field-label">Colors (comma separated)</label><input type="text" id="p-colors" class="admin-input" placeholder="e.g. Amber, Charcoal"></div>
+          </div>
+
+          <label class="check-row flex items-center gap-2 mb-6 cursor-pointer">
+            <input type="checkbox" id="p-active" class="custom-checkbox" checked>
+            <span class="text-sm font-medium">Visible in the shop</span>
+          </label>
+
+          <div class="upload-box p-5 border border-dashed border-line rounded-lg bg-sand mb-6">
+            <div class="flex justify-between items-center mb-3">
+              <label class="field-label mb-0">Product Imagery (Max 6)</label>
+              <button type="button" id="upload_widget" class="btn btn-outline btn-sm">Upload Images</button>
+            </div>
+            <p class="text-xs text-gray mb-4">Click an image to set as the primary thumbnail.</p>
+            <div id="uploaded-images-container" class="image-preview-container flex gap-3 flex-wrap"></div>
+          </div>
+
+          <div class="form-actions flex gap-3 pt-4 border-t border-line">
+            <button type="submit" class="btn btn-primary">Save Product</button>
+            <button type="button" class="btn btn-blur text-charcoal" onclick="resetProductForm()">Clear Form</button>
+          </div>
+        </form>
+
+        <div class="admin-toolbar flex gap-3 mb-6">
+          <input type="search" id="product-search" class="admin-input flex-1" placeholder="Search products...">
+          <select id="product-filter" class="admin-input w-48" aria-label="Filter products">
+            <option value="">All Statuses</option>
+            <option value="active">Visible</option>
+            <option value="inactive">Hidden</option>
+            <option value="low">Low Stock</option>
+            <option value="out">Out of Stock</option>
+          </select>
+        </div>
+        <div id="admin-products-list" class="flex flex-col gap-3"></div>
+      </div>
+
+      <div id="section-categories" class="hidden admin-section fade-in">
+        <form id="cat-form" class="flex gap-3 mb-8 admin-panel">
+          <input type="text" id="cat-name" class="admin-input flex-1" placeholder="New category name (e.g. Solid Shampoos)" required>
+          <button type="submit" class="btn btn-primary whitespace-nowrap">Add Category</button>
+        </form>
+        <ul id="admin-cat-list" class="cat-list flex flex-col gap-2"></ul>
+      </div>
+
+      <div id="section-orders" class="hidden admin-section fade-in">
+        <div class="admin-toolbar flex gap-3 mb-6 flex-wrap">
+          <input type="search" id="order-search" class="admin-input flex-1 min-w-[200px]" placeholder="Search by name, phone, or wilaya...">
+          <select id="order-filter" class="admin-input w-40" aria-label="Filter by status">
+            <option value="">All Orders</option>
+            <option value="new">New</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <button type="button" id="export-orders" class="btn btn-outline text-sm">Export CSV</button>
+        </div>
+
+        <div class="admin-panel p-0 overflow-hidden">
+          <div class="table-wrap overflow-x-auto">
+            <table class="admin-table w-full text-left border-collapse">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Customer Details</th>
+                  <th>Products</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</div></div>
+</div>
+
 <script type="module" src="/js/supabase-client.js"></script>
 <script type="module" src="/js/admin.js"></script>
 </body>

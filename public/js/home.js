@@ -4,9 +4,11 @@ import { esc, productCard } from './ui.js';
 async function loadHome() {
     const sb = await getSupabase();
 
-    // 1. Search
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
     const handleSearch = async () => {
-        const query = document.getElementById('search-input').value.trim();
+        if (!sb || !searchInput) return;
+        const query = searchInput.value.trim();
         if (!query) return;
 
         const { data } = await sb.from('products')
@@ -21,43 +23,49 @@ async function loadHome() {
             window.location.href = `/shop`;
         }
     };
-    document.getElementById('search-btn').addEventListener('click', handleSearch);
-    document.getElementById('search-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSearch();
-    });
-
-    // 2. Categories (random 4)
-    const { data: categories } = await sb.from('categories').select('*');
-    const catContainer = document.getElementById('category-list');
-    if (categories && categories.length) {
-        const shuffled = categories.sort(() => 0.5 - Math.random()).slice(0, 4);
-        catContainer.innerHTML = shuffled.map(cat =>
-            `<a class="chip" href="/shop?category=${cat.id}">${esc(cat.name)}</a>`).join('');
-    } else {
-        catContainer.remove();
+    if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', handleSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
     }
 
-    // 3. Products: active + in stock, newest first
-    const { data: products } = await sb.from('products')
-        .select('*')
-        .eq('active', true)
-        .gt('stock', 0)
-        .order('created_at', { ascending: false })
-        .limit(12);
+    const catContainer = document.getElementById('category-list');
+    if (sb && catContainer) {
+        const { data: categories } = await sb.from('categories').select('*');
+        if (categories && categories.length) {
+            const shuffled = [...categories].sort(() => 0.5 - Math.random()).slice(0, 4);
+            catContainer.innerHTML = shuffled.map(cat =>
+                `<a class="chip" href="/shop?category=${cat.id}">${esc(cat.name)}</a>`).join('');
+        } else {
+            catContainer.remove();
+        }
+    }
 
-    const list = products || [];
     const rail = document.getElementById('featured-products');
-    rail.innerHTML = list.length ? list.map(productCard).join('') : '<p class="empty">No products yet.</p>';
+    if (sb && rail) {
+        const { data: products } = await sb.from('products')
+            .select('*')
+            .eq('active', true)
+            .gt('stock', 0)
+            .order('created_at', { ascending: false })
+            .limit(12);
 
-    // Trending: 4 random from the same pool
-    const trending = [...list].sort(() => 0.5 - Math.random()).slice(0, 4);
-    document.getElementById('trending-products').innerHTML =
-        trending.length ? trending.map(productCard).join('') : '<p class="empty">No products yet.</p>';
+        const list = products || [];
+        rail.innerHTML = list.length ? list.map(productCard).join('') : '<p class="empty">No products yet.</p>';
 
-    // Carousel arrows
-    const step = () => rail.clientWidth * 0.8;
-    document.getElementById('rail-prev').addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
-    document.getElementById('rail-next').addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+        const railPrev = document.getElementById('rail-prev');
+        const railNext = document.getElementById('rail-next');
+        const step = () => rail.clientWidth * 0.8;
+        if (railPrev) railPrev.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
+        if (railNext) railNext.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+
+        const trending = document.getElementById('trending-products');
+        if (trending) {
+            const picks = [...list].sort(() => 0.5 - Math.random()).slice(0, 4);
+            trending.innerHTML = picks.length ? picks.map(productCard).join('') : '<p class="empty">No products yet.</p>';
+        }
+    }
 }
 
 loadHome();
