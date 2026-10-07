@@ -6,128 +6,249 @@
 <title>Biochamelle — Premium Algerian Natural Care</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap" rel="stylesheet">
+<!-- High-fidelity typography: Inter for precise UI, Newsreader for editorial elegance -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  /* Core High-End Variables */
+  :root {
+    --color-paper: #F8F8F6;
+    --color-charcoal: #1C1C1B;
+    --color-charcoal-soft: #4A4A48;
+    --color-sage: #A1B098;
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --shadow-float: 0 24px 48px rgba(0, 0, 0, 0.04);
+    --shadow-deep: 0 40px 80px rgba(0, 0, 0, 0.08);
+    --blur-heavy: blur(24px) saturate(180%);
+    --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body { background-color: var(--color-paper); color: var(--color-charcoal); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
+  .serif-display { font-family: 'Newsreader', serif; font-weight: 400; letter-spacing: -0.03em; line-height: 1.05; }
+  .sub-track { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; color: var(--color-charcoal-soft); }
+
+  /* Floating Glass Navigation */
+  .premium-nav {
+    position: fixed; top: 1.5rem; left: 50%; transform: translateX(-50%);
+    width: calc(100% - 3rem); max-width: 1200px; z-index: 100;
+    background: var(--glass-bg); backdrop-filter: var(--blur-heavy); -webkit-backdrop-filter: var(--blur-heavy);
+    border: 1px solid var(--glass-border); border-radius: 100px;
+    padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { color: var(--color-charcoal-soft); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: var(--transition-smooth); }
+  .nav-links a:hover { color: var(--color-charcoal); }
+  .logo-mark { font-family: 'Newsreader', serif; font-size: 1.25rem; font-weight: 500; color: var(--color-charcoal); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+
+  /* Immersive Hero Section */
+  .hero-concept { position: relative; height: 95vh; display: flex; align-items: center; justify-content: center; padding: 0 1.5rem; }
+  .hero-background {
+    position: absolute; top: 1rem; left: 1rem; right: 1rem; bottom: 1rem;
+    border-radius: 24px; overflow: hidden; z-index: -1;
+  }
+  .hero-background img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); transform: scale(1.05); animation: subtleZoom 20s ease-out infinite alternate; }
+  .hero-glass-card {
+    background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px;
+    padding: 5rem 4rem; text-align: center; max-width: 800px;
+    box-shadow: var(--shadow-deep);
+    animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(30px);
+  }
+  
+  /* Buttons */
+  .btn-luxe {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--color-charcoal); color: #fff; text-decoration: none;
+    padding: 1rem 2rem; border-radius: 100px; font-size: 0.85rem; font-weight: 500;
+    transition: var(--transition-smooth); border: 1px solid var(--color-charcoal);
+  }
+  .btn-luxe:hover { background: transparent; color: var(--color-charcoal); transform: translateY(-2px); box-shadow: var(--shadow-float); }
+  
+  /* Asymmetric Story Section */
+  .story-depth { padding: 10rem 5%; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+  .story-image-wrapper { position: relative; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-deep); height: 700px; }
+  .story-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+  .story-floating-badge {
+    position: absolute; bottom: -2rem; right: -2rem;
+    background: var(--glass-bg); backdrop-filter: var(--blur-heavy);
+    padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-float); width: 200px; text-align: center;
+  }
+
+  /* Product Grid Injection Styling */
+  .shop-preview { padding: 8rem 5%; background: #FFFFFF; }
+  .section-header { text-align: center; margin-bottom: 5rem; }
+  #featured-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; max-width: 1400px; margin: 0 auto; }
+  
+  /* Styling whatever the JS outputs into the grid */
+  #featured-products > div { 
+    background: var(--color-paper); border-radius: 16px; padding: 1rem;
+    transition: var(--transition-smooth); border: 1px solid transparent; cursor: pointer;
+  }
+  #featured-products > div:hover {
+    background: #FFFFFF; border-color: rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-float); transform: translateY(-5px);
+  }
+
+  /* B2B Depth Banner */
+  .b2b-parallax { padding: 5rem 5%; max-width: 1400px; margin: 0 auto 10rem; }
+  .b2b-card {
+    background: var(--color-charcoal); color: #fff; border-radius: 32px;
+    display: flex; overflow: hidden; position: relative; min-height: 500px;
+    box-shadow: var(--shadow-deep);
+  }
+  .b2b-content { padding: 6rem; flex: 1; display: flex; flex-direction: column; justify-content: center; z-index: 2; }
+  .b2b-content h2 { color: #fff; }
+  .b2b-image { flex: 1; position: relative; overflow: hidden; }
+  .b2b-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+
+  /* Footer */
+  .luxe-footer { background: var(--color-paper); padding: 6rem 5% 3rem; border-top: 1px solid rgba(0,0,0,0.05); }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; max-width: 1400px; margin: 0 auto; }
+  .footer-links h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .footer-links ul { list-style: none; padding: 0; margin: 0; }
+  .footer-links li { margin-bottom: 1rem; }
+  .footer-links a { color: var(--color-charcoal-soft); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--color-charcoal); }
+
+  /* Animations */
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes subtleZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
+</style>
 </head>
-<body class="bg-paper text-charcoal antialiased selection:bg-sage selection:text-white">
+<body class="selection:bg-sage selection:text-white">
 
-<header class="site-header glass">
-  <div class="wrap header-grid">
-    <nav class="nav-left" aria-label="Primary">
-      <a href="/shop" class="nav-link">Shop Collection</a>
-      <a href="/#story" class="nav-link">Heritage</a>
-    </nav>
+<header class="premium-nav">
+  <nav class="nav-links" aria-label="Primary">
+    <a href="/shop">Collection</a>
+    <a href="/#story">Heritage</a>
+  </nav>
 
-    <a href="/" class="logo flex items-center justify-center" aria-label="Biochamelle">
-      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
-      Biochamelle
-    </a>
+  <a href="/" class="logo-mark" aria-label="Biochamelle">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
+    Biochamelle
+  </a>
 
-    <nav class="nav-right flex items-center justify-end" aria-label="Secondary">
-      <a href="/#b2b" class="nav-link">Hospitality</a>
-      <div class="made-in-badge">
-        <span class="dot-red"></span> Made in Algeria
-      </div>
-    </nav>
-  </div>
+  <nav class="nav-links" aria-label="Secondary">
+    <a href="/#b2b">Hospitality</a>
+    <a href="/login" class="sub-track">Account</a>
+  </nav>
 </header>
 
 <main>
-  <section class="hero relative">
-    <div class="hero-media">
-      <img src="/img/hero.jpg" alt="Biochamelle amber bottles on marble" class="object-cover w-full h-full">
-      <div class="hero-overlay"></div>
+  <!-- Hero Area -->
+  <section class="hero-concept">
+    <div class="hero-background">
+      <img src="https://images.unsplash.com/photo-1615397323287-3286598eb413?q=80&w=2000&auto=format&fit=crop" alt="Premium Algerian natural care setup">
     </div>
-    <div class="hero-content wrap">
-      <p class="kicker fade-up">Artisanal Skincare</p>
-      <h1 class="display-title fade-up delay-1">Perfected by Nature.<br>Crafted in Algeria.</h1>
-      <div class="hero-actions fade-up delay-2">
-        <a href="/shop" class="btn btn-primary">Explore Rituals</a>
-        <a href="/#story" class="btn btn-blur">Our Philosophy</a>
+    
+    <div class="hero-glass-card">
+      <span class="sub-track">Artisanal Skincare</span>
+      <h1 class="serif-display" style="font-size: 4.5rem; margin: 1.5rem 0;">Perfected by Nature.<br>Crafted in Algeria.</h1>
+      <p style="color: var(--color-charcoal-soft); margin-bottom: 2.5rem; font-size: 1.1rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+        We elevate raw botanical ingredients into sophisticated, high-efficacy natural care rituals.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center;">
+        <a href="/shop" class="btn-luxe">Explore Rituals</a>
       </div>
     </div>
   </section>
 
-  <section class="story wrap section-pad" id="story">
-    <div class="story-grid">
-      <div class="story-text">
-        <h2 class="serif-title">Traditional Know-How,<br>Modern Efficacy.</h2>
-        <p class="body-large">Founded in 2022, Biochamelle transforms raw Algerian botanicals into sophisticated natural care. Zero compromises. Zero unnecessary plastic. Just pure, artisanal excellence crafted in small batches.</p>
-        <a href="#contact" class="link-arrow mt-6">Meet the Founders <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  <!-- Editorial Story Section -->
+  <section class="story-depth" id="story">
+    <div class="story-image-wrapper">
+      <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1200&auto=format&fit=crop" alt="Artisanal processing">
+      <div class="story-floating-badge">
+        <div class="serif-display" style="font-size: 3rem;">100%</div>
+        <div class="sub-track" style="margin-top: 0.5rem;">Natural Origin</div>
       </div>
-      <div class="story-visuals">
-        <div class="img-frame frame-main"><img src="/img/artisan.jpg" alt="Artisan making soap"></div>
-        <div class="img-frame frame-offset glass-panel">
-          <p class="stat-num">100%</p>
-          <p class="stat-label">Natural Origin</p>
+    </div>
+    <div style="padding-left: 2rem;">
+      <span class="sub-track">Our Philosophy</span>
+      <h2 class="serif-display" style="font-size: 3.5rem; margin: 1rem 0 2rem;">Traditional Know-How,<br>Modern Efficacy.</h2>
+      <p style="font-size: 1.1rem; line-height: 1.8; color: var(--color-charcoal-soft); margin-bottom: 3rem;">
+        Founded in 2022, Biochamelle transforms raw Algerian botanicals into sophisticated natural care. Zero compromises. Zero unnecessary plastic. Just pure, artisanal excellence crafted in small batches to preserve the integrity of every ingredient.
+      </p>
+      <a href="#contact" class="btn-luxe" style="background: transparent; color: var(--color-charcoal); border-color: rgba(0,0,0,0.1);">Discover Our Heritage</a>
+    </div>
+  </section>
+
+  <!-- Shop Injection Area -->
+  <section class="shop-preview" id="collection">
+    <div class="section-header">
+      <span class="sub-track">Curated Essentials</span>
+      <h2 class="serif-display" style="font-size: 3rem; margin-top: 1rem;">Shop The Collection</h2>
+    </div>
+    
+    <!-- BE TARGET: Do not change ID -->
+    <div id="featured-products"></div>
+    
+    <div style="text-align: center; margin-top: 5rem;">
+      <a href="/shop" class="btn-luxe" style="background: transparent; color: var(--color-charcoal); border-color: rgba(0,0,0,0.1);">View All Products</a>
+    </div>
+  </section>
+
+  <!-- B2B Parallax Concept -->
+  <section class="b2b-parallax" id="b2b">
+    <div class="b2b-card">
+      <div class="b2b-content">
+        <span class="sub-track" style="color: var(--color-sage);">Hospitality Solutions</span>
+        <h2 class="serif-display" style="font-size: 3.5rem; margin: 1rem 0 1.5rem;">Elevate Your Guest<br>Experience.</h2>
+        <p style="font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.8); margin-bottom: 3rem; max-width: 400px;">
+          Premium solid shampoos, refillable pump dispensers, and customized amenities designed for forward-thinking hotels and luxury guesthouses.
+        </p>
+        <div>
+          <a href="#contact" class="btn-luxe" style="background: #fff; color: var(--color-charcoal); border: none;">Request B2B Catalog</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="shop-preview section-pad bg-sand" id="collection">
-    <div class="wrap">
-      <div class="sec-head">
-        <h2 class="serif-title">Curated Essentials</h2>
-        <div class="sec-tools">
-          <a href="/shop" class="link-arrow">View All Products <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-        </div>
-      </div>
-      <div id="featured-products" class="pgrid mt-8"></div>
-    </div>
-  </section>
-
-  <section class="b2b-banner wrap section-pad" id="b2b">
-    <div class="glass-card flex-row">
-      <div class="card-content">
-        <span class="tag">Hospitality Solutions</span>
-        <h2 class="serif-title mt-4">Elevate Your Guest Experience</h2>
-        <p class="mt-4">Premium solid shampoos, refillable pump dispensers, and customized amenities designed for forward-thinking hotels and guesthouses.</p>
-        <a href="#contact" class="btn btn-outline mt-8">Request B2B Catalog</a>
-      </div>
-      <div class="card-img">
-        <img src="/img/b2b.jpg" alt="Hotel amenities">
+      <div class="b2b-image">
+        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1200&auto=format&fit=crop" alt="Premium Hotel Amenities">
       </div>
     </div>
   </section>
 </main>
 
-<footer class="site-footer" id="contact">
-  <div class="wrap footer-grid">
+<footer class="luxe-footer" id="contact">
+  <div class="footer-grid">
     <div class="brand-col">
-      <a href="/" class="logo text-white">
-        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
+      <a href="/" class="logo-mark" style="font-size: 1.5rem; margin-bottom: 1rem;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V9"/><path d="M12 14c-4 0-6-2.5-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-3.5 2-5.5 6-5.5 0 3.5-2 5.5-6 5.5z"/></svg>
         Biochamelle
       </a>
-      <p class="mt-4 text-gray">Refining Algerian botanicals into modern rituals.</p>
+      <p style="color: var(--color-charcoal-soft); line-height: 1.6; font-size: 0.9rem; max-width: 250px;">
+        Refining Algerian botanicals into modern rituals. Crafted with absolute intention.
+      </p>
     </div>
 
-    <div class="link-col">
+    <div class="footer-links">
       <h4>Shop</h4>
       <ul><li><a href="/shop">Solid Soaps</a></li><li><a href="/shop">Hair Care</a></li><li><a href="/shop">Body Care</a></li></ul>
     </div>
 
-    <div class="link-col">
+    <div class="footer-links">
       <h4>Brand</h4>
       <ul><li><a href="/#story">Heritage</a></li><li><a href="/#earth">Sustainability</a></li><li><a href="/#b2b">Hospitality (B2B)</a></li></ul>
     </div>
 
-    <div class="link-col">
+    <div class="footer-links">
       <h4>Support</h4>
-      <ul><li><a href="#contact">Contact Us</a></li><li><a href="#contact">Shipping &amp; Returns</a></li><li><a href="#contact">FAQ</a></li></ul>
+      <ul><li><a href="#contact">Contact Us</a></li><li><a href="#contact">Shipping & Returns</a></li><li><a href="#contact">FAQ</a></li></ul>
     </div>
   </div>
 
-  <div class="wrap footer-bottom flex justify-between items-center">
+  <div style="max-width: 1400px; margin: 5rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--color-charcoal-soft);">
     <p>&copy; 2026 Biochamelle. All rights reserved.</p>
-    <div class="socials flex gap-4">
-      <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a>
-      <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3a4 4 0 00-4 4v2H7v4h3v6h4v-6h3l1-4h-4V8z"/></svg></a>
-      <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a>
+    <div style="display: flex; gap: 1.5rem;">
+      <span class="sub-track" style="font-size: 0.7rem;">Made in Algeria</span>
     </div>
   </div>
 </footer>
+
+<!-- Preserved Backend Logic Hooks -->
 <script type="module" src="/js/supabase-client.js"></script>
 <script type="module" src="/js/home.js"></script>
 </body>
