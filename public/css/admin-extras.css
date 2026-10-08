@@ -346,3 +346,94 @@ textarea.admin-input {
 .order-note {
   opacity: 0.75;
 }
+
+html body.admin-body {
+  background: var(--color-paper, var(--paper));
+  min-height: 100vh;
+  padding-top: env(safe-area-inset-top);
+}
+
+html body.admin-body .admin-page {
+  width: 100%;
+  padding: clamp(1.5rem, 5vw, 3rem) 5%;
+}
+
+html body.admin-body .admin-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+html body.admin-body .admin-panel {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: clamp(16px, 3vw, 24px);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+  margin-bottom: 2rem;
+}
+
+html body.admin-body .admin-tabs-container {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 100px;
+  padding: 0.35rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+html body.admin-body .admin-tabs-container::-webkit-scrollbar { display: none; }
+
+html body.admin-body .admin-tab {
+  min-height: 44px;
+  padding: 0.6rem 1.25rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+html body.admin-body .admin-tab.active {
+  background: var(--charcoal);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+html body.admin-body .form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.25rem;
+}
+
+html body.admin-body .admin-input {
+  min-height: 44px;
+  border-radius: 12px;
+  font-size: clamp(0.875rem, 1vw, 0.95rem);
+}
+
+html body.admin-body .table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+}
+
+html body.admin-body .table {
+  min-width: 600px;
+}
+
+html body.admin-body .stats-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.25rem), 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  html body.admin-body .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  html body.admin-body .admin-header h2 { font-size: 1.5rem; }
+  html body.admin-body .form-grid { grid-template-columns: 1fr; }
+  html body.admin-body .row-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+  html body.admin-body .row-actions button { width: 100%; }
+}

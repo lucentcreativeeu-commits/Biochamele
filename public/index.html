@@ -50,18 +50,34 @@
   .logo-mark { font-family: 'Newsreader', serif; font-size: 1.25rem; font-weight: 500; color: var(--color-charcoal); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
 
   /* Immersive Hero Section */
-  .hero-concept { position: relative; height: 95vh; display: flex; align-items: center; justify-content: center; padding: 0 1.5rem; }
+  .hero-concept { position: relative; isolation: isolate; min-height: min(820px, 95vh); display: flex; align-items: center; padding: 7rem 8% 4rem; }
   .hero-background {
     position: absolute; top: 1rem; left: 1rem; right: 1rem; bottom: 1rem;
-    border-radius: 24px; overflow: hidden; z-index: -1;
+    border-radius: 24px; overflow: hidden; z-index: 0;
+  }
+  .hero-background::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(16, 19, 15, 0.84) 0%, rgba(16, 19, 15, 0.68) 56%, rgba(16, 19, 15, 0.4) 100%);
   }
   .hero-background img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); transform: scale(1.05); animation: subtleZoom 20s ease-out infinite alternate; }
-  .hero-glass-card {
-    background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 24px;
-    padding: 5rem 4rem; text-align: center; max-width: 800px;
-    box-shadow: var(--shadow-deep);
-    animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(30px);
+  .hero-copy {
+    position: relative; z-index: 1; max-width: 850px; color: #fff;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-eyebrow {
+    display: block; margin-bottom: 1.25rem; color: rgba(255, 255, 255, 0.9);
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+  }
+  .hero-copy h1 {
+    max-width: 850px; margin-bottom: 1.5rem; color: #fff;
+    font-size: clamp(3rem, 6.5vw, 5.5rem); font-weight: 500; line-height: 1.02;
+    letter-spacing: -0.025em; text-shadow: 0 3px 24px rgba(0, 0, 0, 0.48);
+  }
+  .hero-copy p {
+    max-width: 560px; margin-bottom: 2rem; color: rgba(255, 255, 255, 0.96);
+    font-size: clamp(1rem, 1.5vw, 1.125rem); font-weight: 400; line-height: 1.7;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
   }
   
   /* Buttons */
@@ -72,6 +88,8 @@
     transition: var(--transition-smooth); border: 1px solid var(--color-charcoal);
   }
   .btn-luxe:hover { background: transparent; color: var(--color-charcoal); transform: translateY(-2px); box-shadow: var(--shadow-float); }
+  .hero-copy .btn-luxe { background: #fff; color: var(--color-charcoal); border-color: #fff; font-size: 0.9rem; font-weight: 600; }
+  .hero-copy .btn-luxe:hover { background: transparent; color: #fff; }
   
   /* Asymmetric Story Section */
   .story-depth { padding: 10rem 5%; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
@@ -120,6 +138,13 @@
   .footer-links a { color: var(--color-charcoal-soft); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
   .footer-links a:hover { color: var(--color-charcoal); }
 
+  @media (max-width: 640px) {
+    .hero-concept { min-height: 82vh; padding: 7rem 8% 3rem; }
+    .hero-background { top: 0.5rem; left: 0.5rem; right: 0.5rem; bottom: 0.5rem; border-radius: 18px; }
+    .hero-background::after { background: linear-gradient(90deg, rgba(16, 19, 15, 0.82), rgba(16, 19, 15, 0.58)); }
+    .hero-copy h1 { font-size: clamp(2.75rem, 12vw, 4rem); }
+  }
+
   /* Animations */
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
   @keyframes subtleZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
@@ -140,7 +165,6 @@
 
   <nav class="nav-links" aria-label="Navigation secondaire">
     <a href="/#b2b">Espace Pro</a>
-    <a href="/login" class="sub-track">Mon Compte</a>
   </nav>
 </header>
 
@@ -151,15 +175,13 @@
       <img  src="/img/hero.jpg" alt="Rituel de soins naturels aux extraits botaniques algériens">
     </div>
     
-    <div class="hero-glass-card">
-      <span class="sub-track">Soins Artisanaux d'Exception</span>
-      <h1 class="serif-display" style="font-size: 4.5rem; margin: 1.5rem 0;">Sublimé par la nature.<br>Façonné en Algérie.</h1>
-      <p style="color: var(--color-charcoal-soft); margin-bottom: 2.5rem; font-size: 1.1rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+    <div class="hero-copy">
+      <span class="hero-eyebrow">Soins Artisanaux d'Exception</span>
+      <h1 class="serif-display">Sublimé par la nature. Façonné en Algérie.</h1>
+      <p>
         Nous transformons les meilleurs extraits botaniques bruts en rituels de soins naturels, performants et raffinés. Prenez soin de vous, sans compromis.
       </p>
-      <div style="display: flex; gap: 1rem; justify-content: center;">
-        <a href="/shop" class="btn-luxe">Découvrir nos rituels</a>
-      </div>
+      <a href="/shop" class="btn-luxe">Découvrir nos rituels</a>
     </div>
   </section>
 
